@@ -26,3 +26,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def help_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_response(update, context, response="/start - Start the bot\n/help - Show this help message")
+
+
+async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await send_response(update, context, response="Now send me a voice message")

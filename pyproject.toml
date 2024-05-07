@@ -12,8 +12,9 @@ pydub = "^0.25.1"
 httpx = {extras = ["http2"], version = "^0.27.0"}
 python-dotenv = "^1.0.1"
 wit = "^6.0.1"
-sqlalchemy = "^2.0.29"
+sqlalchemy = "^2.0.30"
 pydantic-settings = "^2.2.1"
+asyncpg = "^0.29.0"
 
 
 [build-system]

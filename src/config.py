@@ -1,5 +1,3 @@
-import os
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,6 +16,11 @@ class Settings(BaseSettings):
     local_auth_db: str = ""
     echo_sql: bool = False
 
+    wit_ru_token: str = ""
+    wit_en_token: str = ""
+    wit_es_token: str = ""
+    wit_de_token: str = ""
+
     throttle_limit: int = 100               # 100 attempts per 60 sec
     throttle_window: int = 60
 
@@ -25,13 +28,5 @@ class Settings(BaseSettings):
 settings: Settings = Settings()
 
 LANGUAGES = ("ru", "en", "es", "de", )
-
 if settings.default_language not in LANGUAGES:
     raise ValueError(f"default_language should be one of {LANGUAGES}")
-
-for lang in LANGUAGES:
-    env_token_name = f"WIT_{lang.upper()}_TOKEN"
-    env_token_value = os.getenv(env_token_name, "")
-    globals()[env_token_name] = env_token_value
-    if lang == settings.default_language and not env_token_value:
-        raise ValueError(f"Default language token {env_token_name} should be initialized")
