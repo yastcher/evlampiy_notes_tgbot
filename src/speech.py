@@ -4,7 +4,7 @@ from src.config import settings
 
 
 def transcribe_audio(audio_file):
-    with open(audio_file, "rb") as f:
+    with open(audio_file.file_path, "rb") as f:
         response = client.speech(f, headers={"Content-Type": "audio/wav"})
     return response
 

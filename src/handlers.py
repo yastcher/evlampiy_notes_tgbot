@@ -4,6 +4,8 @@ from telegram import InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
+from src.speech import transcribe_audio
+
 
 async def send_response(
     update: Update,
@@ -29,4 +31,8 @@ async def help_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await send_response(update, context, response="Now send me a voice message")
+    """
+    translate voice message to text
+    """
+    translated_text = transcribe_audio(await update.message.voice.get_file())
+    await send_response(update, context, response=translated_text)
