@@ -1,10 +1,11 @@
 import logging
 
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
+from telegram.ext import CommandHandler, MessageHandler, filters
 
 from src import handlers
+from src.bot import application
 from src.config import settings
-from src.handlers import from_voice_to_text
+from src.speech import from_voice_to_text
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -28,8 +29,6 @@ if not settings.telegram_bot_token:
 
 
 def main():
-    application = ApplicationBuilder().token(settings.telegram_bot_token).build()
-
     for command_name, command_handler in COMMAND_HANDLERS.items():
         application.add_handler(CommandHandler(command_name, command_handler))
 
