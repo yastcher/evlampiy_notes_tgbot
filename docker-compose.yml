@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+
+  evlampiy-bot:
+    restart: always
+    build: .
+    env_file:
+      - .env
