@@ -5,6 +5,7 @@ from telegram.ext import CommandHandler, MessageHandler, filters
 from src import handlers
 from src.bot import application
 from src.config import settings
+# from src.gpt_commands import evlampiy_command
 from src.speech import from_voice_to_text
 
 logging.basicConfig(
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 COMMAND_HANDLERS = {
     "start": handlers.start,
     "help": handlers.help_info,
-    # "evlampiy": transcribe_audio,
+    # "evlampiy": evlampiy_command,
 }
 
 

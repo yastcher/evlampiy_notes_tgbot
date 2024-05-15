@@ -9,4 +9,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def help_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await send_response(update, context, response="/start - Start the bot\n/help - Show this help message")
+    await send_response(
+        update,
+        context,
+        response="/start - Start the bot\n"
+                 "/help - Show this help message\n"
+                 "/evlampiy - Command for gpt",
+    )

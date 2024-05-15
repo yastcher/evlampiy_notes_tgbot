@@ -11,10 +11,12 @@ class Settings(BaseSettings):
     environment: str = "dev"
     default_language: str = "ru"
     telegram_bot_token: str = ""
-    telegram_bot_command: str = "evlampiy"
+    telegram_bot_command: str = "евлампий"
 
     local_auth_db: str = ""
     echo_sql: bool = False
+
+    gpt_token: str = ""
 
     wit_ru_token: str = ""
     wit_en_token: str = ""

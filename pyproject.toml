@@ -6,7 +6,7 @@ authors = ["Yast <yastcher@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 python-telegram-bot = "^21.1.1"
 pydub = "^0.25.1"
 httpx = {extras = ["http2"], version = "^0.27.0"}
@@ -15,6 +15,7 @@ wit = "^6.0.1"
 sqlalchemy = "^2.0.30"
 pydantic-settings = "^2.2.1"
 asyncpg = "^0.29.0"
+openai = "^1.28.1"
 
 
 [build-system]
