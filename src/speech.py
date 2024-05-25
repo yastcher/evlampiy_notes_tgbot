@@ -44,8 +44,9 @@ async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE)
             await send_response(
                 update,
                 context,
-                response=f"Command {settings.telegram_bot_command} detected in the voice message."
-                         f"\nAsk GPT for: {full_translated_text[len(settings.telegram_bot_command):]}",
+                response=f"Command \\*{settings.telegram_bot_command}* detected in the voice message."
+                         f"\nAsk GPT for: {full_translated_text[len(settings.telegram_bot_command):]}"
+                         f"\n/evlampiy",
             )
             return
 
