@@ -11,13 +11,13 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: ./.github/actions/checkout
+      uses: .github/actions/checkout
       with:
         repository: yastcher/evlampiy_notes_tgbot
         ref: release
 
     - name: Set up Docker Buildx
-      uses: ./.github/actions/setup-buildx
+      uses: .github/actions/setup-buildx
 
     - name: Build Docker image
       run: |
@@ -28,7 +28,7 @@ jobs:
         docker save evlampiy_notes_tgbot:latest | gzip > evlampiy_notes_tgbot.tar.gz
 
     - name: Copy Docker image to server
-      uses: ./.github/actions/scp
+      uses: .github/actions/scp
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
