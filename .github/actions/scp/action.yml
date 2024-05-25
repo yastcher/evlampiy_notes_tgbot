@@ -1,0 +1,27 @@
+name: 'SCP'
+description: 'Secure Copy files to a remote server'
+inputs:
+  host:
+    description: 'Remote server hostname'
+    required: true
+  username:
+    description: 'Username for the remote server'
+    required: true
+  key:
+    description: 'SSH private key'
+    required: true
+  source:
+    description: 'Source file path'
+    required: true
+  target:
+    description: 'Target file path'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        echo "${{ inputs.key }}" > private_key
+        chmod 600 private_key
+        scp -i private_key -o StrictHostKeyChecking=no ${{ inputs.source }} ${{ inputs.username }}@${{ inputs.host }}:${{ inputs.target }}
+        rm private_key
+      shell: bash
