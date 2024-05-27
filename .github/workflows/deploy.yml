@@ -8,12 +8,17 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      GPT_TOKEN: ${{ secrets.GPT_TOKEN }}
+      WIT_RU_TOKEN: ${{ secrets.WIT_RU_TOKEN }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SERVER_IP: ${{ secrets.SERVER_IP }}
+      SERVER_USER: ${{ secrets.SERVER_USER }}
 
     steps:
     - name: Checkout code
-      run: |
-        git clone https://github.com/yastcher/evlampiy_notes_tgbot.git .
-        git checkout release
+      uses: actions/checkout@v2
 
     - name: Set up Docker Buildx
       run: |
@@ -29,30 +34,23 @@ jobs:
         docker save evlampiy_notes_tgbot:latest | gzip > evlampiy_notes_tgbot.tar.gz
 
     - name: Copy Docker image to server
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+        echo "$SSH_PRIVATE_KEY" | base64 --decode > private_key
         chmod 600 private_key
-        scp -i private_key -o StrictHostKeyChecking=no evlampiy_notes_tgbot.tar.gz ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/evlampiy_notes_tgbot.tar.gz
+        scp -i private_key -o StrictHostKeyChecking=no evlampiy_notes_tgbot.tar.gz $SERVER_USER@$SERVER_IP:~/evlampiy_notes_tgbot.tar.gz
         rm private_key
 
     - name: Load and run Docker image on server
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SERVER_IP: ${{ secrets.SERVER_IP }}
-        SERVER_USER: ${{ secrets.SERVER_USER }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        GPT_TOKEN: ${{ secrets.GPT_TOKEN }}
-        WIT_RU_TOKEN: ${{ secrets.WIT_RU_TOKEN }}
       run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
+        echo "$SSH_PRIVATE_KEY" | base64 --decode > private_key
         chmod 600 private_key
-        ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << 'EOF'
+        ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+          TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN GPT_TOKEN=$GPT_TOKEN WIT_RU_TOKEN=$WIT_RU_TOKEN \
           gunzip -c ~/evlampiy_notes_tgbot.tar.gz | docker load
           docker stop evlampiy_notes_tgbot || true
           docker rm evlampiy_notes_tgbot || true
-          docker run -d --name evlampiy_notes_tgbot \
+          docker run \
+            -d --name evlampiy_notes_tgbot \
             -e TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN \
             -e GPT_TOKEN=$GPT_TOKEN \
             -e WIT_RU_TOKEN=$WIT_RU_TOKEN \

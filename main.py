@@ -12,7 +12,7 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.DEBUG if settings.debug else logging.INFO,
 )
-trash_loggers = ["httpcore", "httpx", "telegram.ext.ExtBot", ]
+trash_loggers = ("httpcore", "httpx", "telegram.ext.ExtBot", "pydub.converter", )
 for logger_name in trash_loggers:
     logging.getLogger(logger_name).setLevel(logging.WARNING)
 
