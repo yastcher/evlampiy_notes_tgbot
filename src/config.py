@@ -13,18 +13,16 @@ class Settings(BaseSettings):
     telegram_bot_token: str = ""
     telegram_bot_command: str = "кузьма"
 
-    local_auth_db: str = ""
+    db_url: str = ""
     echo_sql: bool = False
 
     gpt_token: str = ""
+    gpt_model: str = "gpt-3.5-turbo"
 
     wit_ru_token: str = ""
     wit_en_token: str = ""
     wit_es_token: str = ""
     wit_de_token: str = ""
-
-    throttle_limit: int = 100               # 100 attempts per 60 sec
-    throttle_window: int = 60
 
 
 settings: Settings = Settings()

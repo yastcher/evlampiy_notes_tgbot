@@ -8,15 +8,22 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 python-telegram-bot = "^21.1.1"
-pydub = "^0.25.1"
 httpx = {extras = ["http2"], version = "^0.27.0"}
 python-dotenv = "^1.0.1"
-wit = "^6.0.1"
 sqlalchemy = "^2.0.30"
-pydantic-settings = "^2.2.1"
+alembic = "^1.13.1"
 asyncpg = "^0.29.0"
-openai = "^1.28.1"
+pydantic-settings = "^2.2.1"
+wit = "^6.0.1"
+pydub = "^0.25.1"
+openai = "^1.35.3"
 
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+ruff = "^0.4.10"
+pytest = "^8.2.2"
+pytest-asyncio = "^0.23.7"
+pytest-postgresql = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core"]
