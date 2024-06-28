@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 COMMAND_HANDLERS = {
     "start": handlers.start,
     "help": handlers.help_info,
+    "language": handlers.choose_language,
     "evlampiy": evlampiy_command,
 }
 

@@ -1,8 +1,13 @@
-version: "3.9"
 services:
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
 
   evlampiy-bot:
     restart: always
     build: .
-    env_file:
-      - .env
+    depends_on:
+      - mongodb

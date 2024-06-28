@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         case_sensitive=False,
-        # env_file=".env",
+        env_file=".env",
     )
 
     debug: bool = True
@@ -13,8 +13,7 @@ class Settings(BaseSettings):
     telegram_bot_token: str = ""
     telegram_bot_command: str = "кузьма"
 
-    db_url: str = ""
-    echo_sql: bool = False
+    mongo_uri: str = "mongodb://mongodb:27017/"
 
     gpt_token: str = ""
     gpt_model: str = "gpt-3.5-turbo"
