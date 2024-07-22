@@ -1,6 +1,6 @@
 import logging
 
-from telegram.ext import CommandHandler, MessageHandler, filters
+from telegram.ext import CommandHandler, MessageHandler, filters, CallbackQueryHandler
 
 from src import handlers
 from src.bot import application
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 COMMAND_HANDLERS = {
     "start": handlers.start,
     "help": handlers.help_info,
-    "language": handlers.choose_language,
+    "choose_language": handlers.choose_language,
     "evlampiy": evlampiy_command,
 }
 
@@ -33,6 +33,8 @@ if not settings.telegram_bot_token:
 def main():
     for command_name, command_handler in COMMAND_HANDLERS.items():
         application.add_handler(CommandHandler(command_name, command_handler))
+
+    application.add_handler(CallbackQueryHandler(handlers.lang_buttons, pattern="set_lang_"))
 
     application.add_handler(MessageHandler(filters.VOICE, from_voice_to_text))
 

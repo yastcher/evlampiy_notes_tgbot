@@ -1,5 +1,10 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+ENGLISH = "en"
+RUSSIAN = "ru"
+SPAIN = "es"
+LANGUAGES = (ENGLISH, RUSSIAN, SPAIN, )
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -9,7 +14,7 @@ class Settings(BaseSettings):
 
     debug: bool = True
     environment: str = "dev"
-    default_language: str = "ru"
+    default_language: str = RUSSIAN
     telegram_bot_token: str = ""
     telegram_bot_command: str = "кузьма"
 
@@ -25,7 +30,3 @@ class Settings(BaseSettings):
 
 
 settings: Settings = Settings()
-
-LANGUAGES = ("ru", "en", "es", "de", )
-if settings.default_language not in LANGUAGES:
-    raise ValueError(f"default_language should be one of {LANGUAGES}")
