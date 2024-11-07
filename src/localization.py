@@ -1,31 +1,37 @@
-from src.config import ENGLISH, RUSSIAN, SPAIN
+from src.config import ENGLISH, RUSSIAN, SPAIN, GERMAN
 
 translates = {
     "success": {
         ENGLISH: "Success",
         RUSSIAN: "Успешно",
         SPAIN: "Éxito",
+        GERMAN: "Erfolg",
     },
     "not_found": {
         ENGLISH: "Not found",
         RUSSIAN: "Не найден",
         SPAIN: "No encontrado",
+        GERMAN: "Nicht gefunden",
     },
     "error_connection": {
         ENGLISH: "Connection error. Try later",
         RUSSIAN: "Ошибка соединения. Попробуйте позднее",
         SPAIN: "Error de conexión. Inténtalo más tarde",
+        GERMAN: "Verbindungsfehler. Versuchen Sie es später",
     },
     "bad_data": {
         ENGLISH: "Bad data",
         RUSSIAN: "Неверные данные",
         SPAIN: "Datos incorrectos",
+        GERMAN: "Schlechte Daten",
     },
-    "choose_language": {
+    "choose_my_language": {
         ENGLISH: "Selected language: English",
         RUSSIAN: "Выбранный язык: Русский",
         SPAIN: "Idioma seleccionado: Español",
+        GERMAN: "Ausgewählte Sprache: Deutsch",
     },
+
 }
 
 

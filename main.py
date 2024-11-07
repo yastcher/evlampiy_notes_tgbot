@@ -1,6 +1,6 @@
 import logging
 
-from telegram.ext import CommandHandler, MessageHandler, filters, CallbackQueryHandler
+from telegram.ext import CommandHandler, MessageHandler, filters, CallbackQueryHandler, ConversationHandler
 
 from src import handlers
 from src.bot import application
@@ -12,7 +12,11 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.DEBUG if settings.debug else logging.INFO,
 )
-trash_loggers = ("httpcore", "httpx", "telegram.ext.ExtBot", "pydub.converter", "urllib3", )
+trash_loggers = (
+    "httpcore", "httpx",
+    "telegram.ext.ExtBot", "pydub.converter", "urllib3",
+    "pymongo.topology",
+)
 for logger_name in trash_loggers:
     logging.getLogger(logger_name).setLevel(logging.WARNING)
 
@@ -20,14 +24,25 @@ logger = logging.getLogger(__name__)
 
 COMMAND_HANDLERS = {
     "start": handlers.start,
-    "help": handlers.help_info,
-    "choose_language": handlers.choose_language,
+    "choose_your_language": handlers.choose_language,
+    "enter_your_command": handlers.enter_your_command,
     "evlampiy": evlampiy_command,
 }
 
 
 if not settings.telegram_bot_token:
     raise ValueError("need TELEGRAM_BOT_TOKEN env variables")
+
+
+enter_command_handler = ConversationHandler(
+    entry_points=[CommandHandler("enter_your_command", handlers.enter_your_command)],
+    states={
+        handlers.WAITING_FOR_COMMAND: [
+            MessageHandler(filters.TEXT & ~filters.COMMAND, handlers.handle_command_input)
+        ],
+    },
+    fallbacks=[],
+)
 
 
 def main():
@@ -37,6 +52,10 @@ def main():
     application.add_handler(CallbackQueryHandler(handlers.lang_buttons, pattern="set_lang_"))
 
     application.add_handler(MessageHandler(filters.VOICE, from_voice_to_text))
+
+    # application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handlers.enter_your_command))
+
+    application.add_handler(enter_command_handler)
 
     application.run_polling()
 
