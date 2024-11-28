@@ -7,8 +7,9 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from src.bot import send_response
-from src.config import settings, ENGLISH, RUSSIAN, SPAIN, GERMAN
-from src.mongo import get_user_language, get_user_command
+from src.chat_params import get_chat_id
+from src.config import settings, ENGLISH, RUSSIAN, SPANISH, GERMANY
+from src.mongo import get_chat_language, get_gpt_command
 
 logger = logging.getLogger(__name__)
 
@@ -31,9 +32,9 @@ async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE)
         for i in range(0, len(audio), chunk_length_ms)
     ]
 
-    user_id = update.effective_user.id
-    user_language = await get_user_language(user_id)
-    user_command = await get_user_command(user_id)
+    chat_id = get_chat_id(update)
+    user_language = await get_chat_language(chat_id)
+    gpt_command = await get_gpt_command(chat_id)
     user_voice_translator = voice_translators[user_language]
     full_translated_text = ""
     for i, chunk in enumerate(chunks):
@@ -52,12 +53,12 @@ async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE)
         logger.debug("Empty voice message.")
         return
 
-    if full_translated_text.lower().startswith(user_command):
+    if full_translated_text.lower().startswith(gpt_command):
         await send_response(
             update,
             context,
-            response=f"Command \\*{user_command}* detected in the voice message."
-                     f"\nAsk GPT for: {full_translated_text[len(user_command):]}",
+            response=f"Command \\*{gpt_command}* detected in the voice message."
+                     f"\nAsk GPT for: {full_translated_text[len(gpt_command):]}",
         )
         return
 
@@ -72,6 +73,6 @@ async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE)
 voice_translators = {
     ENGLISH: wit.Wit(settings.wit_en_token),
     RUSSIAN: wit.Wit(settings.wit_ru_token),
-    SPAIN: wit.Wit(settings.wit_es_token),
-    GERMAN: wit.Wit(settings.wit_de_token),
+    SPANISH: wit.Wit(settings.wit_es_token),
+    GERMANY: wit.Wit(settings.wit_de_token),
 }

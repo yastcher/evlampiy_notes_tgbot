@@ -2,9 +2,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ENGLISH = "en"
 RUSSIAN = "ru"
-SPAIN = "es"
-GERMAN = "de"
-LANGUAGES = (ENGLISH, RUSSIAN, SPAIN, GERMAN, )
+SPANISH = "es"
+GERMANY = "de"
+LANGUAGES = (ENGLISH, RUSSIAN, SPANISH, GERMANY, )
 
 
 class Settings(BaseSettings):

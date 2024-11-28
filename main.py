@@ -34,17 +34,6 @@ if not settings.telegram_bot_token:
     raise ValueError("need TELEGRAM_BOT_TOKEN env variables")
 
 
-enter_command_handler = ConversationHandler(
-    entry_points=[CommandHandler("enter_your_command", handlers.enter_your_command)],
-    states={
-        handlers.WAITING_FOR_COMMAND: [
-            MessageHandler(filters.TEXT & ~filters.COMMAND, handlers.handle_command_input)
-        ],
-    },
-    fallbacks=[],
-)
-
-
 def main():
     for command_name, command_handler in COMMAND_HANDLERS.items():
         application.add_handler(CommandHandler(command_name, command_handler))
@@ -53,8 +42,15 @@ def main():
 
     application.add_handler(MessageHandler(filters.VOICE, from_voice_to_text))
 
-    # application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handlers.enter_your_command))
-
+    enter_command_handler = ConversationHandler(
+        entry_points=[CommandHandler("enter_your_command", handlers.enter_your_command)],
+        states={
+            handlers.WAITING_FOR_COMMAND: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, handlers.handle_command_input)
+            ],
+        },
+        fallbacks=[],
+    )
     application.add_handler(enter_command_handler)
 
     application.run_polling()

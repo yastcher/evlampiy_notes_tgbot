@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "evlampiy-notes-tgbot"
-version = "0.1.1"
+version = "0.2.0"
 description = "Telegram bot (Evlampiy) for managing notes"
 authors = ["Yast <yastcher@gmail.com>"]
 readme = "README.md"
