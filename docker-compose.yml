@@ -1,3 +1,13 @@
+x-variables: &variables
+  environment:
+    TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+    WIT_RU_TOKEN: ${WIT_RU_TOKEN}
+    WIT_EN_TOKEN: ${WIT_EN_TOKEN}
+    WIT_ES_TOKEN: ${WIT_ES_TOKEN}
+    WIT_DE_TOKEN: ${WIT_DE_TOKEN}
+    MONGO_URI: ${MONGO_URI}
+    GPT_TOKEN: ${GPT_TOKEN}
+
 services:
 
   mongodb:
@@ -6,15 +16,9 @@ services:
     ports:
       - "27017:27017"
 
-  evlampiy_notes_tgbot:
+  evlampiy_bot:
+    image: evlampiy_notes_tgbot:latest
     restart: always
+    <<: *variables
     depends_on:
       - mongodb
-    environment:
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
-      - WIT_RU_TOKEN=${WIT_RU_TOKEN}
-      - WIT_EN_TOKEN=${WIT_EN_TOKEN}
-      - WIT_ES_TOKEN=${WIT_ES_TOKEN}
-      - WIT_DE_TOKEN=${WIT_DE_TOKEN}
-      - MONGO_URI=${MONGO_URI}
-      - GPT_TOKEN=${GPT_TOKEN}

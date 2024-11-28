@@ -29,32 +29,21 @@ jobs:
         docker buildx create --use
         docker buildx inspect --bootstrap
 
-    - name: Build Docker image
+    - name: Build and save docker image
       run: |
         docker build -t evlampiy_notes_tgbot:latest .
-
-    - name: Save Docker image to file
-      run: |
         docker save evlampiy_notes_tgbot:latest | gzip > evlampiy_notes_tgbot.tar.gz
 
-    - name: Copy Docker image and docker-compose file to server
+    - name: Copy docker image and docker-compose file to server and run
       run: |
         echo "$SSH_PRIVATE_KEY" | base64 --decode > private_key
         chmod 600 private_key
-        scp -i private_key -o StrictHostKeyChecking=no evlampiy_notes_tgbot.tar.gz $SERVER_USER@$SERVER_IP:~/evlampiy_notes_tgbot.tar.gz
-        scp -i private_key -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:~/docker-compose.yml
-        rm private_key
-
-    - name: Load and run Docker image on server
-      run: |
-        echo "$SSH_PRIVATE_KEY" | base64 --decode > private_key
-        chmod 600 private_key
+        scp -i private_key -o StrictHostKeyChecking=no evlampiy_notes_tgbot.tar.gz $SERVER_USER@$SERVER_IP:~/evlampiy/evlampiy_notes_tgbot.tar.gz
+        scp -i private_key -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:~/evlampiy/docker-compose.yml
         ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+          cd evlampiy
           docker compose down || true
-          TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN GPT_TOKEN=$GPT_TOKEN \
-          WIT_RU_TOKEN=$WIT_RU_TOKEN WIT_EN_TOKEN=$WIT_EN_TOKEN WIT_ES_TOKEN=$WIT_ES_TOKEN WIT_DE_TOKEN=$WIT_DE_TOKEN \
-          MONGO_URI=$MONGO_URI \
-          gunzip -c ~/evlampiy_notes_tgbot.tar.gz | docker load
+          gunzip -c ~/evlampiy/evlampiy_notes_tgbot.tar.gz | docker load
           docker compose up -d
         EOF
         rm private_key
