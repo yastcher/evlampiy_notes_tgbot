@@ -50,11 +50,11 @@ jobs:
         echo "$SSH_PRIVATE_KEY" | base64 --decode > private_key
         chmod 600 private_key
         ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
-          docker-compose down || true
+          docker compose down || true
           TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN GPT_TOKEN=$GPT_TOKEN \
           WIT_RU_TOKEN=$WIT_RU_TOKEN WIT_EN_TOKEN=$WIT_EN_TOKEN WIT_ES_TOKEN=$WIT_ES_TOKEN WIT_DE_TOKEN=$WIT_DE_TOKEN \
           MONGO_URI=$MONGO_URI \
           gunzip -c ~/evlampiy_notes_tgbot.tar.gz | docker load
-          docker-compose up -d
+          docker compose up -d
         EOF
         rm private_key
