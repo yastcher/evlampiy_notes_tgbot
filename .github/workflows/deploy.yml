@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-      GPT_TOKEN: ${{ secrets.GPT_TOKEN }}
       WIT_RU_TOKEN: ${{ secrets.WIT_RU_TOKEN }}
       WIT_EN_TOKEN: ${{ secrets.WIT_EN_TOKEN }}
       WIT_ES_TOKEN: ${{ secrets.WIT_ES_TOKEN }}
       WIT_DE_TOKEN: ${{ secrets.WIT_DE_TOKEN }}
       MONGO_URI: ${{ secrets.MONGO_URI }}
+      GPT_TOKEN: ${{ secrets.GPT_TOKEN }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       SERVER_IP: ${{ secrets.SERVER_IP }}
       SERVER_USER: ${{ secrets.SERVER_USER }}
@@ -37,11 +37,12 @@ jobs:
       run: |
         docker save evlampiy_notes_tgbot:latest | gzip > evlampiy_notes_tgbot.tar.gz
 
-    - name: Copy Docker image to server
+    - name: Copy Docker image and docker-compose file to server
       run: |
         echo "$SSH_PRIVATE_KEY" | base64 --decode > private_key
         chmod 600 private_key
         scp -i private_key -o StrictHostKeyChecking=no evlampiy_notes_tgbot.tar.gz $SERVER_USER@$SERVER_IP:~/evlampiy_notes_tgbot.tar.gz
+        scp -i private_key -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:~/docker-compose.yml
         rm private_key
 
     - name: Load and run Docker image on server
@@ -49,17 +50,11 @@ jobs:
         echo "$SSH_PRIVATE_KEY" | base64 --decode > private_key
         chmod 600 private_key
         ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+          docker-compose down || true
           TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN GPT_TOKEN=$GPT_TOKEN \
           WIT_RU_TOKEN=$WIT_RU_TOKEN WIT_EN_TOKEN=$WIT_EN_TOKEN WIT_ES_TOKEN=$WIT_ES_TOKEN WIT_DE_TOKEN=$WIT_DE_TOKEN \
           MONGO_URI=$MONGO_URI \
           gunzip -c ~/evlampiy_notes_tgbot.tar.gz | docker load
-          docker stop evlampiy_notes_tgbot || true
-          docker rm evlampiy_notes_tgbot || true
-          docker run \
-            -d --name evlampiy_notes_tgbot \
-            -e TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN \
-            -e GPT_TOKEN=$GPT_TOKEN \
-            -e WIT_RU_TOKEN=$WIT_RU_TOKEN \
-            evlampiy_notes_tgbot:latest
+          docker-compose up -d
         EOF
         rm private_key

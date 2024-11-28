@@ -1,4 +1,4 @@
-# evlampiy_notes_tgbot
+# evlampiy_notes_bot
 
 https://t.me/evlampiy_user_bot
 

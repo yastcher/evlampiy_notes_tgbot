@@ -11,3 +11,11 @@ services:
     build: .
     depends_on:
       - mongodb
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - WIT_RU_TOKEN=${WIT_RU_TOKEN}
+      - WIT_EN_TOKEN=${WIT_EN_TOKEN}
+      - WIT_ES_TOKEN=${WIT_ES_TOKEN}
+      - WIT_DE_TOKEN=${WIT_DE_TOKEN}
+      - MONGO_URI=${MONGO_URI}
+      - GPT_TOKEN=${GPT_TOKEN}

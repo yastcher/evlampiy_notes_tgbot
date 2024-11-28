@@ -16,8 +16,8 @@ class Settings(BaseSettings):
     debug: bool = True
     environment: str = "dev"
     default_language: str = RUSSIAN
+    telegram_bot_command: str = "евлампий"
     telegram_bot_token: str = ""
-    telegram_bot_command: str = "кузьма"
 
     mongo_uri: str = "mongodb://mongodb:27017/"
 
