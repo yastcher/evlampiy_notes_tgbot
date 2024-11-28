@@ -1,6 +1,6 @@
 # evlampiy_notes_bot
 
-https://t.me/evlampiy_user_bot
+https://t.me/evlampiy_notes_bot
 
 The bot is designed to help you take notes in the telegram chat:
 1. Translate voice messages to text

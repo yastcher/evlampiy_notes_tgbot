@@ -6,7 +6,7 @@ services:
     ports:
       - "27017:27017"
 
-  evlampiy-bot:
+  evlampiy_notes_tgbot:
     restart: always
     depends_on:
       - mongodb
