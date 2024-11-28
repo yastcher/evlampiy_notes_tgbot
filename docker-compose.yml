@@ -8,7 +8,6 @@ services:
 
   evlampiy-bot:
     restart: always
-    build: .
     depends_on:
       - mongodb
     environment:
