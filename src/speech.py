@@ -54,19 +54,19 @@ async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return
 
     if full_translated_text.lower().startswith(gpt_command):
-        await send_response(
-            update,
-            context,
-            response=f"Command \\*{gpt_command}* detected in the voice message."
-                     f"\nAsk GPT for: {full_translated_text[len(gpt_command):]}",
-        )
-        return
-
+        tgm_response = {
+            "response": f"Command \\*{gpt_command}* detected in the voice message."
+                        f"\nAsk GPT for: {full_translated_text[len(gpt_command):]}",
+        }
+    else:
+        tgm_response = {
+            "response": full_translated_text,
+            "reply_to_message_id": update.message.message_id,
+        }
     await send_response(
         update,
         context,
-        response=full_translated_text,
-        reply_to_message_id=update.message.message_id,
+        **tgm_response,
     )
 
 

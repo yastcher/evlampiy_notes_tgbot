@@ -5,12 +5,9 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y ffmpeg build-essential libffi-dev libssl-dev && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir poetry
-
-COPY pyproject.toml ./
-
-RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
-
 COPY . .
+
+RUN pip install uv && uv sync
+ENV PATH="/app/.venv/bin:$PATH"
 
 CMD ["python", "main.py"]

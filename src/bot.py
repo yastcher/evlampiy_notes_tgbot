@@ -8,6 +8,8 @@ from src.config import settings
 
 application = ApplicationBuilder().token(settings.telegram_bot_token).build()
 
+MAX_TELEGRAM_MESSAGE_LENGTH = 4096
+
 
 async def send_response(
     update: Update,
@@ -16,11 +18,17 @@ async def send_response(
     keyboard: Optional[InlineKeyboardMarkup] = None,
     **kwargs,
 ) -> None:
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=response,
-        parse_mode=ParseMode.HTML,
-        disable_web_page_preview=True,
-        reply_markup=keyboard,
-        **kwargs,
-    )
+    chunks = [
+        response[i:i + MAX_TELEGRAM_MESSAGE_LENGTH]
+        for i in range(0, len(response), MAX_TELEGRAM_MESSAGE_LENGTH)
+    ]
+
+    for i, chunk in enumerate(chunks):
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=chunk,
+            parse_mode=ParseMode.HTML,
+            disable_web_page_preview=True,
+            reply_markup=keyboard if i == 0 else None,
+            **kwargs,
+        )

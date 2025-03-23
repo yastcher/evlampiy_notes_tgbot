@@ -3,7 +3,11 @@ from telegram.ext import ContextTypes, ConversationHandler
 
 from src.chat_params import get_chat_id, is_user_admin, is_private_chat
 from src.localization import get_translate
-from src.mongo import get_chat_language, set_chat_language, get_gpt_command, set_gpt_command
+from src.mongo import (
+    get_chat_language, set_chat_language,
+    get_gpt_command, set_gpt_command,
+    set_github_settings,
+)
 
 WAITING_FOR_COMMAND = 1
 
@@ -75,3 +79,21 @@ async def handle_command_input(update: Update, context: ContextTypes.DEFAULT_TYP
     await set_gpt_command(chat_id, gpt_command)
     await update.message.reply_text(f"Your command '{gpt_command}' has been saved.")
     return ConversationHandler.END
+
+
+async def set_github_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+    /set_github
+    await response: owner repo token
+    # /set_github MyUser MyRepo ghp_XXXX...
+    """
+    chat_id = get_chat_id(update)
+    if not update.message or not update.message.text:
+        return
+    parts = update.message.text.split()
+    if len(parts) < 4:
+        await update.message.reply_text("Usage: /set_github <owner> <repo> <token>")
+        return
+    _, owner, repo, token = parts
+    await set_github_settings(chat_id, owner, repo, token)
+    await update.message.reply_text("GitHub settings saved.")
