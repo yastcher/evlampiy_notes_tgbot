@@ -1,7 +1,13 @@
 import asyncio
 import logging
 
-from telegram.ext import CommandHandler, MessageHandler, filters, CallbackQueryHandler, ConversationHandler
+from telegram.ext import (
+    CallbackQueryHandler,
+    CommandHandler,
+    ConversationHandler,
+    MessageHandler,
+    filters,
+)
 
 from src import handlers
 from src.bot import application
@@ -15,8 +21,11 @@ logging.basicConfig(
     level=logging.DEBUG if settings.debug else logging.INFO,
 )
 trash_loggers = (
-    "httpcore", "httpx",
-    "telegram.ext.ExtBot", "pydub.converter", "urllib3",
+    "httpcore",
+    "httpx",
+    "telegram.ext.ExtBot",
+    "pydub.converter",
+    "urllib3",
     "pymongo.topology",
 )
 for logger_name in trash_loggers:
@@ -44,16 +53,22 @@ def main():
     for command_name, command_handler in COMMAND_HANDLERS.items():
         application.add_handler(CommandHandler(command_name, command_handler))
 
-    application.add_handler(CallbackQueryHandler(handlers.lang_buttons, pattern="set_lang_"))
+    application.add_handler(
+        CallbackQueryHandler(handlers.lang_buttons, pattern="set_lang_")
+    )
 
     application.add_handler(MessageHandler(filters.VOICE, from_voice_to_text))
 
     enter_command_handler = ConversationHandler(
-        entry_points=[CommandHandler("enter_your_command", handlers.enter_your_command)],
+        entry_points=[
+            CommandHandler("enter_your_command", handlers.enter_your_command)
+        ],
         states={
             handlers.WAITING_FOR_COMMAND: [
-                MessageHandler(filters.TEXT & ~filters.COMMAND, handlers.handle_command_input)
-            ],
+                MessageHandler(
+                    filters.TEXT & ~filters.COMMAND, handlers.handle_command_input
+                )
+            ]
         },
         fallbacks=[],
     )

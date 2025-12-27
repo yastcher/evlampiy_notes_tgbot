@@ -1,8 +1,8 @@
-import logging
-import requests
 import base64
 import datetime
+import logging
 
+import requests
 from telegram import Update
 
 from src.chat_params import get_chat_id
@@ -31,12 +31,11 @@ async def add_short_note_to_obsidian(update: Update):
         "Authorization": f"Bearer {github_token}",
         "Accept": "application/vnd.github+json",
     }
-    data = {
-        "message": commit_message,
-        "content": content_base64,
-    }
+    data = {"message": commit_message, "content": content_base64}
     response = requests.put(url, headers=headers, json=data)
     if response.status_code in (200, 201):
         logger.debug(f"Created note {filename} in the repository.")
     else:
-        logger.error(f"Error creating note. Status: {response.status_code}, Details: {response.json()}")
+        logger.error(
+            f"Error creating note. Status: {response.status_code}, Details: {response.json()}"
+        )

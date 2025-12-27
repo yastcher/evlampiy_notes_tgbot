@@ -1,18 +1,44 @@
 # evlampiy_notes_bot
 
+[![CI](https://github.com/YastYa/evlampiy_notes_tgbot/actions/workflows/deploy.yml/badge.svg)](https://github.com/YastYa/evlampiy_notes_tgbot/actions)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 https://t.me/evlampiy_notes_bot
 
-The bot is designed to help you take notes in the telegram chat:
-1. Translate voice messages to text
-2. Push the translated text to the telegram bot / chat with bot
-3. Custom settings (language) for each bot in chats
+Telegram bot for managing notes with voice-to-text translation.
 
-How to use:
-1. Directly with bot => `/start`
-2. Or add the bot to the chat and use the command `/start` if you owner or admin
+## Features
 
-What needs to be done next:
-1. Integrate export to Obsidian (or other note-taking applications)
-2. Implement classification of messages by topics
-3. Implement the command for analyzing voice/text messages by GPT
-4. ...
+- Translate voice messages to text (supports English, German, Russian, Spanish)
+- Custom language settings per chat/user
+- GPT command integration via voice
+- Export notes to Obsidian via GitHub
+
+## Requirements
+
+- Python 3.12+
+- MongoDB
+- FFmpeg
+- [Wit.ai](https://wit.ai/) tokens for speech recognition
+- Telegram Bot token
+
+### [Installation, configuration and deploy](DEPLOY.md)
+
+### Bot commands
+
+- `/start` — Show help and current settings
+- `/choose_your_language` — Set voice recognition language
+
+## Roadmap
+
+- [x] Voice-to-text translation
+- [x] Multi-language support
+- [ ] GPT command integration
+- [ ] Export to Obsidian
+- [ ] Message classification by topics
+- [ ] ChatMemberUpdated handler for cleanup
+
+## License
+
+[GPL-3.0](LICENSE)

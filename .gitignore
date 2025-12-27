@@ -2,13 +2,16 @@
 poetry.lock
 uv.lock
 .env
+.env.*
 venv
+.venv
 /__pycache__/
 
 /.tox/
 .nox/
 .coverage
 .coverage.*
+coverage.*
 .cache
 nosetests.xml
 coverage.xml

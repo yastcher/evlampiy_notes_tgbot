@@ -8,7 +8,7 @@ from telegram.ext import ContextTypes
 
 from src.bot import send_response
 from src.chat_params import get_chat_id
-from src.config import settings, ENGLISH, RUSSIAN, SPANISH, GERMANY
+from src.config import ENGLISH, GERMANY, RUSSIAN, SPANISH, settings
 from src.mongo import get_chat_language, get_gpt_command
 
 logger = logging.getLogger(__name__)
@@ -28,8 +28,7 @@ async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     chunk_length_ms = 19500  # < 20 sec
     chunks = [
-        audio[i:i + chunk_length_ms]
-        for i in range(0, len(audio), chunk_length_ms)
+        audio[i : i + chunk_length_ms] for i in range(0, len(audio), chunk_length_ms)
     ]
 
     chat_id = get_chat_id(update)
@@ -42,8 +41,7 @@ async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE)
         chunk.export(converted_stream, format="mp3")
         converted_stream.seek(0)
         response = user_voice_translator.speech(
-            audio_file=converted_stream,
-            headers={"Content-Type": "audio/mpeg3"}
+            audio_file=converted_stream, headers={"Content-Type": "audio/mpeg3"}
         )
         text = response["text"] if "text" in response else ""
         full_translated_text += text
@@ -56,18 +54,14 @@ async def from_voice_to_text(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if full_translated_text.lower().startswith(gpt_command):
         tgm_response = {
             "response": f"Command \\*{gpt_command}* detected in the voice message."
-                        f"\nAsk GPT for: {full_translated_text[len(gpt_command):]}",
+            f"\nAsk GPT for: {full_translated_text[len(gpt_command) :]}"
         }
     else:
         tgm_response = {
             "response": full_translated_text,
             "reply_to_message_id": update.message.message_id,
         }
-    await send_response(
-        update,
-        context,
-        **tgm_response,
-    )
+    await send_response(update, context, **tgm_response)
 
 
 voice_translators = {

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from telegram import Update, InlineKeyboardMarkup
+from telegram import InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import ApplicationBuilder, ContextTypes
 
@@ -19,7 +19,7 @@ async def send_response(
     **kwargs,
 ) -> None:
     chunks = [
-        response[i:i + MAX_TELEGRAM_MESSAGE_LENGTH]
+        response[i : i + MAX_TELEGRAM_MESSAGE_LENGTH]
         for i in range(0, len(response), MAX_TELEGRAM_MESSAGE_LENGTH)
     ]
 

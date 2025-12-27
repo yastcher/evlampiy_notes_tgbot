@@ -1,45 +1,64 @@
-from src.config import ENGLISH, RUSSIAN, SPANISH, GERMANY
+from src.config import ENGLISH, GERMANY, RUSSIAN, SPANISH
 
 translates = {
     "success": {
         ENGLISH: "Success",
+        GERMANY: "Erfolg",
         RUSSIAN: "Успешно",
         SPANISH: "Éxito",
-        GERMANY: "Erfolg",
     },
     "not_found": {
         ENGLISH: "Not found",
+        GERMANY: "Nicht gefunden",
         RUSSIAN: "Не найден",
         SPANISH: "No encontrado",
-        GERMANY: "Nicht gefunden",
     },
     "error_connection": {
         ENGLISH: "Connection error. Try later",
+        GERMANY: "Verbindungsfehler. Versuchen Sie es später",
         RUSSIAN: "Ошибка соединения. Попробуйте позднее",
         SPANISH: "Error de conexión. Inténtalo más tarde",
-        GERMANY: "Verbindungsfehler. Versuchen Sie es später",
     },
     "bad_data": {
         ENGLISH: "Bad data",
+        GERMANY: "Schlechte Daten",
         RUSSIAN: "Неверные данные",
         SPANISH: "Datos incorrectos",
-        GERMANY: "Schlechte Daten",
     },
     "choose_my_language": {
         ENGLISH: "Selected language: English",
+        GERMANY: "Ausgewählte Sprache: Deutsch",
         RUSSIAN: "Выбранный язык: Русский",
         SPANISH: "Idioma seleccionado: Español",
-        GERMANY: "Ausgewählte Sprache: Deutsch",
     },
-
+    "start_message": {
+        ENGLISH: (
+            "I can translate a voice message to text!\n"
+            "current language are: {chat_language}\n"
+            "current voice command are (you can start voice from): {gpt_command}\n"
+            "/start - Show this message\n"
+            "/choose_your_language - Set the voice language"
+        ),
+        GERMANY: (
+            "Ich kann eine Sprachnachricht in Text übersetzen!\n"
+            "Aktuelle Sprache: {chat_language}\n"
+            "Aktueller Sprachbefehl ist (Sie können die Spracherkennung starten mit): {gpt_command}\n"
+            "/start - Zeige diese Nachricht\n"
+            "/choose_your_language - Legen Sie die Sprache fest"
+        ),
+        RUSSIAN: (
+            "Я могу перевести голосовое сообщение в текст!\n"
+            "Текущий язык: {chat_language}\n"
+            "Текущая голосовая команда (вы можете начать голос с): {gpt_command}\n"
+            "/start - Показать это сообщение\n"
+            "/choose_your_language - Установить язык голосовых сообщений"
+        ),
+        SPANISH: (
+            "¡Puedo traducir un mensaje de voz a texto!\n"
+            "El idioma actual es: {chat_language}\n"
+            "El comando de voz actual es (puedes iniciar la voz desde): {gpt_command}\n"
+            "/start - Muestra este mensaje\n"
+            "/choose_your_language - Configura el idioma de voz"
+        ),
+    },
 }
-
-
-def get_translate(message_key: str, lang: str, args: tuple = ()) -> str:
-    """
-    possible to send message_key or message
-    if message_key not present in translates then return pure source message
-    else return formatted and translated message
-    """
-    message: str = translates.get(message_key, {}).get(lang, message_key)
-    return message % args

@@ -21,29 +21,44 @@ jobs:
       SERVER_USER: ${{ secrets.SERVER_USER }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      run: |
-        docker buildx create --use
-        docker buildx inspect --bootstrap
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-    - name: Build and save docker image
-      run: |
-        docker build -t evlampiy_notes_tgbot:latest .
-        docker save evlampiy_notes_tgbot:latest | gzip > evlampiy_notes_tgbot.tar.gz
+      - name: Run linter
+        run: |
+          uv run ruff check
 
-    - name: Copy docker image and docker-compose file to server and run
-      run: |
-        echo "$SSH_PRIVATE_KEY" | base64 --decode > private_key
-        chmod 600 private_key
-        scp -i private_key -o StrictHostKeyChecking=no evlampiy_notes_tgbot.tar.gz $SERVER_USER@$SERVER_IP:~/evlampiy/evlampiy_notes_tgbot.tar.gz
-        scp -i private_key -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:~/evlampiy/docker-compose.yml
-        ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
-          cd evlampiy
-          docker compose down || true
-          gunzip -c ~/evlampiy/evlampiy_notes_tgbot.tar.gz | docker load
-          docker compose up -d
-        EOF
-        rm private_key
+      - name: Run tests
+        run: |
+          pip install uv
+          uv sync --group dev
+          uv run pytest
+
+      - name: Set up Docker Buildx
+        run: |
+          docker buildx create --use
+          docker buildx inspect --bootstrap
+
+      - name: Build and save docker image
+        run: |
+          docker build -t evlampiy_notes_tgbot:latest .
+          docker save evlampiy_notes_tgbot:latest | gzip > evlampiy_notes_tgbot.tar.gz
+
+      - name: Copy docker image and docker-compose file to server and run
+        run: |
+          echo "$SSH_PRIVATE_KEY" | base64 --decode > private_key
+          chmod 600 private_key
+          scp -i private_key -o StrictHostKeyChecking=no evlampiy_notes_tgbot.tar.gz $SERVER_USER@$SERVER_IP:~/evlampiy/evlampiy_notes_tgbot.tar.gz
+          scp -i private_key -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:~/evlampiy/docker-compose.yml
+          ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+            cd evlampiy
+            docker compose down || true
+            gunzip -c ~/evlampiy/evlampiy_notes_tgbot.tar.gz | docker load
+            docker compose up -d
+          EOF
+          rm private_key

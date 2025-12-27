@@ -1,7 +1,8 @@
 [project]
 name = "evlampiy-notes-tgbot"
-version = "0.2.1"
+version = "0.2.2"
 description = "Telegram bot (Evlampiy) for managing notes"
+readme = "README.md"
 authors = ["Yast <yastcher@gmail.com>"]
 requires-python = "~=3.12"
 dependencies = [
@@ -13,13 +14,49 @@ dependencies = [
     "pydub~=0.25.1",
     "openai~=1.59.8",
     "beanie==1.29.0",
+    "motor==3.7.1",
 ]
 
 [dependency-groups]
 dev = [
     "black~=24.4.2",
-    "flake8~=7.1.0",
-    "flake8-cognitive-complexity~=0.1.0",
-    "pytest~=8.3.1",
+    "pytest~=8.4.2",
     "pytest-asyncio~=0.23.8",
+    "pytest-mock==3.15.1",
+    "pytest-cov~=7.0.0",
 ]
+
+[tool.ruff]
+line-length = 120
+exclude = [
+    '.github',
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "N", "I"]
+ignore = [
+    "E203", "E501", "E731",
+    "N802", "N803", "N805", "N806",
+]
+fixable = ["ALL"]
+
+[tool.ruff.lint.isort]
+known-local-folder = [
+    'src',
+    'tests',
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+# skip-magic-trailing-comma = true
+
+[tool.pytest.ini_options]
+addopts = [
+    "-p", "pytest_cov",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=json:coverage.json",
+    "--cov-branch"
+]
+testpaths = ["tests"]
