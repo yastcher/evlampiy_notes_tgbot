@@ -31,12 +31,12 @@ jobs:
 
       - name: Run linter
         run: |
+          pip install uv
+          uv sync --group dev
           uv run ruff check
 
       - name: Run tests
         run: |
-          pip install uv
-          uv sync --group dev
           uv run pytest
 
       - name: Set up Docker Buildx
